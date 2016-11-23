@@ -1,11 +1,11 @@
-import ReferenceBtnComponent from '../components/ReferenceBtn'
+import Dashboard from '../components/dashboard/Dashboard'
 
 export default {
   name: 'Справка',
   options: [],
   connects: {
     components: [
-      { component: ReferenceBtnComponent, position: 'clientMenu' },
+      { component: Dashboard, position: 'clientMenu' },
     ]
   }
 }
