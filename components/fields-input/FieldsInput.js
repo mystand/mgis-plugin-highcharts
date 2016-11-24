@@ -20,13 +20,11 @@ const FieldsInput = (props) => {
           R.values(attributes).map((attribute) => {
             const id = `fields-${attribute.key}`
             return (
-              <div 
-                key={ attribute.id }
-                onClick={ R.partial(onCheckboxChange, [attribute.id]) }
-              >
+              <div key={ attribute.id }>
                 <input
                   id={ id }
                   type='checkbox'
+                  onChange={ R.partial(onCheckboxChange, [attribute.id]) }
                   checked={ R.contains(attribute.id, value) }
                 />
                 <label htmlFor={ id }> {attribute.label} </label>

@@ -2,6 +2,8 @@ import React from 'react'
 import R from 'ramda'
 import classnames from 'classnames'
 import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { layerWithNeededAtrSelector } from '../../selectors' 
 
 import styles from './dashboard-style.styl'
 import ChartComponent from './ChartComponent'
@@ -27,7 +29,8 @@ const renderChart = (opt1, numb) => {
 }
 
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  console.log(props)
   const graph = R.zip([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1], opt)
   return (
     <div className={ styles.dashboard }>
@@ -50,4 +53,5 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+
+export default connect(layerWithNeededAtrSelector)(Dashboard)
