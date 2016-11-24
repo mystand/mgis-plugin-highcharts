@@ -44,7 +44,7 @@ const Dashboard = () => {
             </div>
           </Link>
         </div>
-        { graph.map(([numb, option]) => renderChart(option, numb)) }
+        { R.of(R.head(graph)).map(([numb, option]) => renderChart(option, numb)) }
       </div>
     </div>
   )
