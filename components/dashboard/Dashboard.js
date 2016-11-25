@@ -9,6 +9,19 @@ import styles from './dashboard-style.styl'
 import ChartComponent from './ChartComponent'
 import opt from './chartsdata'
 
+function buildData(config, feature, layer) {
+  let dataResult = config
+  if (!R.isNil(layer)) {
+    const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer)), feature.properties)
+    const valueSum = R.reduce(R.add, 0, R.values(values))
+  console.log(values, valueSum)
+    const newData = R.map(([key, value]) => ({ name: layer[key].label, y: value/valueSum*100 }), R.toPairs(values))
+    dataResult.series[0].data = newData
+  }
+  console.log(dataResult)
+  return dataResult
+}
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
@@ -26,7 +39,6 @@ class Dashboard extends React.Component {
           className={ styles.container }
         >
           <ChartComponent
-            type={'pie'}
             container={ opt1.title.text }
             options={ opt1 }
           />
@@ -38,18 +50,16 @@ class Dashboard extends React.Component {
   render() { 
     console.log(this.props)
     const { layer, feature } = this.props
-    let data1 = opt
-    let data = opt
-    if (!R.isNil(layer)) {
-      const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer)), feature.properties)
-      console.log(values, opt)
-      data.series[0].data = R.values(values)
-      data.series[0].name = layer[R.head(R.keys(values))].label
-      data.tooltip.valueSuffix = layer[R.head(R.keys(values))].units
-      console.log(layer[R.head(R.keys(values))].units)
-      // data.yAxis.labels.format = layer[R.head(R.keys(values))].units
-    }
-    console.log(data1, data)
+    const config = buildData(opt, feature, layer)
+    // if (!R.isNil(layer)) {
+    //   const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer)), feature.properties)
+    //   console.log(values, opt)
+    //   data.series[0].data = R.values(values)
+    //   data.series[0].name = layer[R.head(R.keys(values))].label
+    //   data.tooltip.valueSuffix = layer[R.head(R.keys(values))].units
+    //   console.log(layer[R.head(R.keys(values))].units)
+    //   // data.yAxis.labels.format = layer[R.head(R.keys(values))].units
+    // }
     return (
       <div>
       { !R.isNil(layer) &&
@@ -71,7 +81,7 @@ class Dashboard extends React.Component {
               >
               </div>
           </div>
-          { this.renderChart(data) }
+          { this.renderChart(config) }
         </div>
       </div>)}
       </div>

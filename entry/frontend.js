@@ -12,6 +12,8 @@ export default {
         fields: [
           { key: 'sourceLayerKey', label: 'Слой', type: 'select', options: 'layers' },
           { key: 'fields', label: 'Величины для графика', type: FieldsInput },
+          { key: 'name', label: 'Название графика', type: 'string' },
+          { key: 'partLabel', label: 'Название доли', type: 'string' }
         ]
       }
     }
