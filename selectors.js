@@ -6,18 +6,26 @@ export const layerWithNeededAtrSelector = createSelector(
   state => state.routing,
   state => state.layers,
   state => state.pluginConfigs['highcharts'],
-  (routing, layers, config) => {
+  state => state.features,
+  (routing, layers, config, features) => {
     const featureId = routing.params.featureId
-    const neededLayers = R.reduce((r, layer) => r[`${layer.sourceLayerKey}`]={ attributes: layer.fields }, {}, config.items)
-    const pickedLayers = R.map(layer => {
+    const feature = features[featureId]
+    if (R.isNil(feature)) {
+      return { layer: undefined }
+    }
+    const neededLayers = R.reduce((r, layer) => R.assoc(layer.sourceLayerKey, { attributes: layer.fields }, r), {}, R.values(config.items))
+    const pickedLayers = R.filter(R.pipe(R.isNil, R.not), R.map(layer => {
       const withinNeeded = R.prop(layer.key, neededLayers)
       if (!R.isNil(withinNeeded)) {
-        return R.updatePath(['attributes'], R.pickAll(withinNeeded), layer)
+        return R.pickBy(attribute => R.contains(attribute.id, withinNeeded.attributes), layer.attributes)
       }
-    }, layers)
+    }, layers))
+    const layer = pickedLayers[feature.properties.layer_key]
   return {
     featureId,
-    pickedLayers
+    pickedLayers,
+    feature,
+    layer
   }
   }
 )
