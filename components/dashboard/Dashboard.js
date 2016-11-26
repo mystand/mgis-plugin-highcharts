@@ -12,11 +12,15 @@ import opt from './chartsdata'
 function buildData(config, feature, layer) {
   let dataResult = config
   if (!R.isNil(layer)) {
-    const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer)), feature.properties)
+    const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer.attributes)), feature.properties)
     const valueSum = R.reduce(R.add, 0, R.values(values))
   console.log(values, valueSum)
-    const newData = R.map(([key, value]) => ({ name: layer[key].label, y: value/valueSum*100 }), R.toPairs(values))
+    const newTitle = `<b>${layer.headers.title}</b>`
+    const newPartLabel = layer.headers.partLabel
+    const newData = R.map(([key, value]) => ({ name: layer.attributes[key].label, y: value/valueSum*100 }), R.toPairs(values))
     dataResult.series[0].data = newData
+    dataResult.title.text = newTitle
+    dataResult.series[0].name = newPartLabel
   }
   console.log(dataResult)
   return dataResult
@@ -25,7 +29,7 @@ function buildData(config, feature, layer) {
 class Dashboard extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { show: true }  
+    this.state = { show: false }  
   }
 
   renderChart = (opt1) => {
@@ -51,41 +55,27 @@ class Dashboard extends React.Component {
     console.log(this.props)
     const { layer, feature } = this.props
     const config = buildData(opt, feature, layer)
-    // if (!R.isNil(layer)) {
-    //   const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer)), feature.properties)
-    //   console.log(values, opt)
-    //   data.series[0].data = R.values(values)
-    //   data.series[0].name = layer[R.head(R.keys(values))].label
-    //   data.tooltip.valueSuffix = layer[R.head(R.keys(values))].units
-    //   console.log(layer[R.head(R.keys(values))].units)
-    //   // data.yAxis.labels.format = layer[R.head(R.keys(values))].units
-    // }
-    return (
-      <div>
-      { !R.isNil(layer) &&
-      (this.state.show ?
-      <div
-        onClick={ () => { this.setState({ show: R.not(this.state.show)}) }}
-      >
-       { 'Показать, скрыть графики' }
-      </div> :
-      <div className={ styles.dashboard }>
-        <div className={ styles.mainBlock }>
-          <div className={ styles.headBlock }>
-            <div className={ styles.title }>
-              { 'Целевые показатели' }
+    if (!R.isNil(layer)) {
+      return (
+        <div>
+          <div
+            className={ styles.buttonContainer }
+            onClick={ () => { this.setState({ show: R.not(this.state.show)}) }}
+          >
+            <div className={ styles.showButton }>
+              { 'Показать, скрыть графики' }
             </div>
-              <div
-                title={ 'Close card' }
-                className={ styles.close }
-              >
-              </div>
-          </div>
-          { this.renderChart(config) }
+          </div> 
+        { this.state.show && 
+          <div className={ styles.dashboard }>
+            <div className={ styles.mainBlock }>
+              { this.renderChart(config) }
+            </div>
+          </div>}
         </div>
-      </div>)}
-      </div>
-    )
+      )
+    }
+    return null
   }
 }
 

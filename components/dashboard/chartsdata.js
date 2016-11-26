@@ -8,7 +8,7 @@ const opt =
     },
     title: {
       align: 'left',
-      text: '<b>Всего отходов</b>',
+      text: '<b>Название графика</b>',
       type: 'pie'
     },
     tooltip: {
@@ -25,7 +25,7 @@ const opt =
       }
     },
     series: [{
-      name: 'Кирилл КЛочков',
+      name: 'Доля в процентах',
       data: [{
         name: 'Proprietary or Undetectable',
         y: 0.2

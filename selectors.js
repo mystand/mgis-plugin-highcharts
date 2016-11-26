@@ -13,11 +13,16 @@ export const layerWithNeededAtrSelector = createSelector(
     if (R.isNil(feature)) {
       return { layer: undefined }
     }
-    const neededLayers = R.reduce((r, layer) => R.assoc(layer.sourceLayerKey, { attributes: layer.fields }, r), {}, R.values(config.items))
+    const neededLayers = R.reduce((r, layer) => R.assoc(layer.sourceLayerKey,
+      { attributes: layer.fields, headers: { title: layer.name, partLabel: layer.partLabel } }, r), {}, R.values(config.items))
     const pickedLayers = R.filter(R.pipe(R.isNil, R.not), R.map(layer => {
       const withinNeeded = R.prop(layer.key, neededLayers)
       if (!R.isNil(withinNeeded)) {
-        return R.pickBy(attribute => R.contains(attribute.id, withinNeeded.attributes), layer.attributes)
+        const layerForState  = {
+          attributes: R.pickBy(attribute => R.contains(attribute.id, withinNeeded.attributes), layer.attributes),
+          headers: withinNeeded.headers
+        }
+        return layerForState
       }
     }, layers))
     const layer = pickedLayers[feature.properties.layer_key]
