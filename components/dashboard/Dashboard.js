@@ -50,7 +50,6 @@ class Dashboard extends React.Component {
   }
 
   render() { 
-    console.log(this.props)
     const { layer, feature } = this.props
     const config = buildData(opt, feature, layer)
     if (!R.isNil(layer)) {
