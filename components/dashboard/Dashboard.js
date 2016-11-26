@@ -14,7 +14,6 @@ function buildData(config, feature, layer) {
   if (!R.isNil(layer)) {
     const values = R.pickBy((attribute, key) => !R.isNil(R.prop(key, layer.attributes)), feature.properties)
     const valueSum = R.reduce(R.add, 0, R.values(values))
-  console.log(values, valueSum)
     const newTitle = `<b>${layer.headers.title}</b>`
     const newPartLabel = layer.headers.partLabel
     const newData = R.map(([key, value]) => ({ name: layer.attributes[key].label, y: value/valueSum*100 }), R.toPairs(values))
@@ -22,7 +21,6 @@ function buildData(config, feature, layer) {
     dataResult.title.text = newTitle
     dataResult.series[0].name = newPartLabel
   }
-  console.log(dataResult)
   return dataResult
 }
 
