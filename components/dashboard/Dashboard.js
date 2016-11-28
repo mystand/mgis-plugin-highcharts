@@ -1,7 +1,6 @@
 import React from 'react'
 import R from 'ramda'
 import classnames from 'classnames'
-import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { layerWithNeededAtrSelector } from '../../selectors' 
 
