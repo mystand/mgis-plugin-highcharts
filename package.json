@@ -1,11 +1,11 @@
 {
-  "name": "mgis-plugin-2tp-waste",
+  "name": "mgis-plugin-highcharts",
   "version": "1.0.0",
   "description": "",
   "keywords": [
     "mgis",
     "plugin",
-    "waste"
+    "highcharts"
   ],
   "license": "ISC",
   "dependencies": {
