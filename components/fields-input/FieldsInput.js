@@ -18,7 +18,7 @@ const FieldsInput = (props) => {
       <div style={ { marginLeft: '20px', marginBottom: '20px' } }>
         {
           R.values(attributes).map((attribute) => {
-            const id = `fields-${attribute.key}`
+            const id = `fields-${attribute.id}`
             return (
               <div key={ attribute.id }>
                 <input
