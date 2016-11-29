@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import ReactHighcharts from 'react-highcharts'
 
 import styles from './dashboard-style.styl'
-// import ChartComponent from './ChartComponent'
 import opt from './chartsdata'
 
 function buildData(data, feature, layer, pluginConfig) {
@@ -24,7 +23,7 @@ function buildData(data, feature, layer, pluginConfig) {
     }
     return null
   }, null, R.values(pluginConfig.items))
-  console.log(neededLayer)
+
   if (!R.isNil(neededLayer)) {
     const dataResult = data
     const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), neededLayer.attributes)
@@ -62,7 +61,7 @@ class Dashboard extends React.Component {
     const { layer, feature, pluginConfig } = this.props
     const config = buildData(opt, feature, layer, pluginConfig)
 
-    if (!R.isNil(layer)) {
+    if (!R.isNil(config)) {
       return (
         <div>
           <div
