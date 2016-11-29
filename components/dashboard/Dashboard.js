@@ -10,6 +10,7 @@ function buildData(data, feature, layer, pluginConfig) {
   if (R.isNil(feature.id)) {
     return null
   }
+
   const layer_key = feature.properties.layer_key
   const neededLayer = R.reduce((r, config) => {
     if (config.sourceLayerKey === layer_key) {
@@ -28,7 +29,7 @@ function buildData(data, feature, layer, pluginConfig) {
     const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), neededLayer.attributes)
     const valuesSum = R.reduce(R.add, 0, R.values(values))
     if (valuesSum === 0) {
-      return null
+      return 'not enough data'
     }
     const newTitle = `<b>${neededLayer.headers.title}</b>`
     const newPartLabel = neededLayer.headers.partLabel
@@ -41,7 +42,7 @@ function buildData(data, feature, layer, pluginConfig) {
     dataResult.series[0].name = newPartLabel
     return dataResult
   }
-  return null
+  return 'config is empty'
 }
 
 class Dashboard extends React.Component {
@@ -80,11 +81,14 @@ class Dashboard extends React.Component {
         </div>
       )
     }
-    return (
-      <div className={ styles.errorMessage }>
-        {'Недостаточно данных для графика'}
-      </div>
-    )
+    if (R.type(config) === 'String') {
+      return (
+        <div className={ styles.errorMessage }>
+          {'Недостаточно данных для графика'}
+        </div>
+      )
+    }
+    return null
   }
 }
 
