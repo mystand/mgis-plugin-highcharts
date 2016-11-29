@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
       )
     }
     return (
-      <div>
+      <div className={ styles.errorMessage }>
         {'Недостаточно данных для графика'}
       </div>
     )
