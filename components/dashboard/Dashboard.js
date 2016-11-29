@@ -42,7 +42,7 @@ function buildData(data, feature, layer, pluginConfig) {
     dataResult.series[0].name = newPartLabel
     return dataResult
   }
-  return 'config is empty'
+  return null
 }
 
 class Dashboard extends React.Component {
@@ -61,25 +61,8 @@ class Dashboard extends React.Component {
     const { layer, feature, pluginConfig } = this.props
     const config = buildData(opt, feature, layer, pluginConfig)
 
-    if (!R.isNil(config)) {
-      return (
-        <div>
-          <div
-            className={ styles.buttonContainer }
-            onClick={ () => { this.setState({ show: R.not(this.state.show) }) } }
-          >
-            <div className={ styles.showButton }>
-              { 'Показать, скрыть графики' }
-            </div>
-          </div>
-          { this.state.show &&
-          <div className={ styles.preContainer }>
-            <div className={ styles.container }>
-              <ReactHighcharts config={ config } />
-            </div>
-          </div>}
-        </div>
-      )
+    if (R.isNil(config)) {
+      return null
     }
     if (R.type(config) === 'String') {
       return (
@@ -88,7 +71,24 @@ class Dashboard extends React.Component {
         </div>
       )
     }
-    return null
+    return (
+      <div>
+        <div
+          className={ styles.buttonContainer }
+          onClick={ () => { this.setState({ show: R.not(this.state.show) }) } }
+        >
+          <div className={ styles.showButton }>
+            { 'Показать, скрыть графики' }
+          </div>
+        </div>
+        { this.state.show &&
+        <div className={ styles.preContainer }>
+          <div className={ styles.container }>
+            <ReactHighcharts config={ config } />
+          </div>
+        </div>}
+      </div>
+    )
   }
 }
 
