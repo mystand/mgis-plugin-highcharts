@@ -9,7 +9,7 @@ import opt from './chartsdata'
 
 function buildData(data, feature, layer, pluginConfig) {
   if (R.isNil(feature.id)) {
-    return { layer: undefined }
+    return null
   }
   const layer_key = feature.properties.layer_key
   const neededLayer = R.reduce((r, config) => {
@@ -24,15 +24,19 @@ function buildData(data, feature, layer, pluginConfig) {
     }
     return null
   }, null, R.values(pluginConfig.items))
+  console.log(neededLayer)
   if (!R.isNil(neededLayer)) {
     const dataResult = data
-    const values = R.map(JSON.parse, neededLayer.attributes)
-    const valueSum = R.reduce(R.add, 0, R.values(values))
+    const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), neededLayer.attributes)
+    const valuesSum = R.reduce(R.add, 0, R.values(values))
+    if (valuesSum === 0) {
+      return null
+    }
     const newTitle = `<b>${neededLayer.headers.title}</b>`
     const newPartLabel = neededLayer.headers.partLabel
     const newData = R.map(([key, value]) => ({
       name: layer.attributes[key].label,
-      y: (value / valueSum) * 100
+      y: (value / valuesSum) * 100
     }), R.toPairs(values))
     dataResult.series[0].data = newData
     dataResult.title.text = newTitle
@@ -63,7 +67,7 @@ class Dashboard extends React.Component {
         <div>
           <div
             className={ styles.buttonContainer }
-            onClick={ () => { this.setState({ show: R.not(this.state.show)}) }}
+            onClick={ () => { this.setState({ show: R.not(this.state.show) }) } }
           >
             <div className={ styles.showButton }>
               { 'Показать, скрыть графики' }
@@ -78,7 +82,11 @@ class Dashboard extends React.Component {
         </div>
       )
     }
-    return null
+    return (
+      <div>
+        {'Недостаточно данных для графика'}
+      </div>
+    )
   }
 }
 
