@@ -21,9 +21,8 @@ function buildData(data, feature, layer, pluginConfig) {
         }
       })
     }
-    return null
+    return r
   }, null, R.values(pluginConfig.items))
-
   if (!R.isNil(neededLayer)) {
     const dataResult = data
     const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), neededLayer.attributes)
@@ -42,7 +41,7 @@ function buildData(data, feature, layer, pluginConfig) {
     dataResult.series[0].name = newPartLabel
     return dataResult
   }
-  return data
+  return null
 }
 
 class Dashboard extends React.Component {
