@@ -9,6 +9,6 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "highcharts": "^4.2.6"
+    "react-highcharts": "^11.0.0"
   }
 }

@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react'
 import R from 'ramda'
-import classnames from 'classnames'
 import { connect } from 'react-redux'
+import ReactHighcharts from 'react-highcharts'
 
 import styles from './dashboard-style.styl'
-import ChartComponent from './ChartComponent'
+// import ChartComponent from './ChartComponent'
 import opt from './chartsdata'
 
 function buildData(data, feature, layer, pluginConfig) {
@@ -54,25 +54,6 @@ class Dashboard extends React.Component {
     this.state = { show: false }
   }
 
-  renderChart = (opt1) => {
-    const lay = styles.left
-    return (
-      <div
-        key={ opt1.title.text }
-        className={ classnames(styles.preContainer, lay) }
-      >
-        <div
-          className={ styles.container }
-        >
-          <ChartComponent
-            container={ opt1.title.text }
-            options={ opt1 }
-          />
-        </div>
-      </div>
-    )
-  }
-
   render() {
     const { layer, feature, pluginConfig } = this.props
     const config = buildData(opt, feature, layer, pluginConfig)
@@ -89,9 +70,9 @@ class Dashboard extends React.Component {
             </div>
           </div>
           { this.state.show &&
-          <div className={ styles.dashboard }>
-            <div className={ styles.mainBlock }>
-              { this.renderChart(config) }
+          <div className={ styles.preContainer }>
+            <div className={ styles.container }>
+              <ReactHighcharts config={ config } />
             </div>
           </div>}
         </div>
