@@ -31,7 +31,7 @@ function buildData(data, feature, layer, pluginConfig) {
       const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), cfg.attributes)
       const valuesSum = R.reduce(R.add, 0, R.values(values))
       if (valuesSum === 0) {
-        return 'not enough data'
+        return cfg.headers.title
       }
       const newTitle = `<b>${cfg.headers.title}</b>`
       const newPartLabel = cfg.headers.partLabel
@@ -69,7 +69,8 @@ class Dashboard extends React.Component {
           className={ styles.preContainer }
         >
           <div className={ styles.errorMessage }>
-            {'Недостаточно данных для графика'}
+            <div className={ styles.messageTitle }>{ cfg }</div>
+            <div>{'Недостаточно данных для графика'}</div>
           </div>
         </div>
       )

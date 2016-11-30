@@ -1,5 +1,8 @@
 const opt = {
   chart: {
+    style: {
+      fontFamily: 'Open Sans, sans-serif'
+    },
     plotBackgroundColor: null,
     plotBorderWidth: null,
     plotShadow: false,
