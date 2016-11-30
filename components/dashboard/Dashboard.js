@@ -14,33 +14,37 @@ function buildData(data, feature, layer, pluginConfig) {
   const layer_key = feature.properties.layer_key
   const neededLayer = R.reduce((r, config) => {
     if (config.sourceLayerKey === layer_key) {
-      return ({
+      const configFromState = {
         attributes: R.pickAll(config.fields, feature.properties),
         headers: {
           title: config.name,
           partLabel: config.partLabel
         }
-      })
+      }
+      return (r.concat(configFromState))
     }
     return r
-  }, null, R.values(pluginConfig.items))
-  if (!R.isNil(neededLayer)) {
-    const dataResult = data
-    const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), neededLayer.attributes)
-    const valuesSum = R.reduce(R.add, 0, R.values(values))
-    if (valuesSum === 0) {
-      return 'not enough data'
-    }
-    const newTitle = `<b>${neededLayer.headers.title}</b>`
-    const newPartLabel = neededLayer.headers.partLabel
-    const newData = R.map(([key, value]) => ({
-      name: layer.attributes[key].label,
-      y: (value / valuesSum) * 100
-    }), R.toPairs(values))
-    dataResult.series[0].data = newData
-    dataResult.title.text = newTitle
-    dataResult.series[0].name = newPartLabel
-    return dataResult
+  }, [], R.values(pluginConfig.items))
+  if (!R.isEmpty(neededLayer)) {
+    const newConfig = neededLayer.map((cfg) => {
+      const dataResult = R.clone(data)
+      const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), cfg.attributes)
+      const valuesSum = R.reduce(R.add, 0, R.values(values))
+      if (valuesSum === 0) {
+        return 'not enough data'
+      }
+      const newTitle = `<b>${cfg.headers.title}</b>`
+      const newPartLabel = cfg.headers.partLabel
+      const newData = R.map(([key, value]) => ({
+        name: layer.attributes[key].label,
+        y: (value / valuesSum) * 100
+      }), R.toPairs(values))
+      dataResult.series[0].data = newData
+      dataResult.title.text = newTitle
+      dataResult.series[0].name = newPartLabel
+      return dataResult
+    })
+    return newConfig
   }
   return null
 }
@@ -57,19 +61,37 @@ class Dashboard extends React.Component {
     this.state = { show: false }
   }
 
-  render() {
-    const { layer, feature, pluginConfig } = this.props
-    const config = buildData(opt, feature, layer, pluginConfig)
-
-    if (R.isNil(config)) {
-      return null
-    }
-    if (R.type(config) === 'String') {
+  renderHighChart(cfg, index) {
+    if (R.type(cfg) === 'String') {
       return (
-        <div className={ styles.errorMessage }>
-          {'Недостаточно данных для графика'}
+        <div
+          key={ index }
+          className={ styles.preContainer }
+        >
+          <div className={ styles.errorMessage }>
+            {'Недостаточно данных для графика'}
+          </div>
         </div>
       )
+    }
+    return (
+      <div
+        key={ index }
+        className={ styles.preContainer }
+      >
+        <div className={ styles.container }>
+          <ReactHighcharts config={ cfg } />
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    const { layer, feature, pluginConfig } = this.props
+    const configList = buildData(opt, feature, layer, pluginConfig)
+
+    if (R.isNil(configList)) {
+      return null
     }
     return (
       <div>
@@ -82,11 +104,7 @@ class Dashboard extends React.Component {
           </div>
         </div>
         { this.state.show &&
-        <div className={ styles.preContainer }>
-          <div className={ styles.container }>
-            <ReactHighcharts config={ config } />
-          </div>
-        </div>}
+        configList.map((cfg, index) => this.renderHighChart(cfg, index))}
       </div>
     )
   }
