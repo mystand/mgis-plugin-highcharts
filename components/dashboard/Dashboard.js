@@ -63,14 +63,14 @@ class Dashboard extends React.Component {
 
     if (R.isNil(config)) {
       return null
-    }
+    } else {
     if (R.type(config) === 'String') {
       return (
         <div className={ styles.errorMessage }>
           {'Недостаточно данных для графика'}
         </div>
       )
-    }
+    } else {
     return (
       <div>
         <div
@@ -89,6 +89,8 @@ class Dashboard extends React.Component {
         </div>}
       </div>
     )
+    }
+  }
   }
 }
 
