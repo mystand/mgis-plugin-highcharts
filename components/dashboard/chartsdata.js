@@ -14,7 +14,7 @@ const opt = {
     type: 'pie'
   },
   tooltip: {
-    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br> колличество: <b>{point.y}</b> <b>{point.units}</b>'
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br> значение: <b>{point.y}</b> <b>{point.units}</b>'
   },
   plotOptions: {
     pie: {
