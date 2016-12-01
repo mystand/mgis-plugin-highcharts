@@ -14,7 +14,7 @@ const opt = {
     type: 'pie'
   },
   tooltip: {
-    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br> колличество: <b>{point.y}</b> <b>{point.units}</b>'
   },
   plotOptions: {
     pie: {
@@ -30,6 +30,7 @@ const opt = {
     name: 'Доля в процентах',
     data: [{
       name: 'Proprietary or Undetectable',
+      units: 'т',
       y: 0.2
     }]
   }]
