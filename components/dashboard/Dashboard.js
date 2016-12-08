@@ -37,7 +37,7 @@ function buildData(data, feature, layer, pluginConfig) {
       const newPartLabel = cfg.headers.partLabel
       const newData = R.map(([key, value]) => ({
         name: layer.attributes[key].label,
-        units: layer.attributes[key].units,
+        units: ` ${layer.attributes[key].units}`,
         y: value
       }), R.toPairs(values))
       dataResult.series[0].data = newData
