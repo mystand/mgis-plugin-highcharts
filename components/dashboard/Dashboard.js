@@ -29,7 +29,7 @@ function buildData(feature, layer, pluginConfig) {
   }, [], R.values(pluginConfig.items))
   if (!R.isEmpty(neededLayer)) {
     const newConfig = neededLayer.map((cfg) => {
-      const data = cfg.headers.type === 'Pie' ? pie : column
+      const data = cfg.headers.type === 'Columns' ? column : pie
       const dataResult = R.clone(data)
       const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), cfg.attributes)
       const valuesSum = R.reduce(R.add, 0, R.values(values))
@@ -40,7 +40,7 @@ function buildData(feature, layer, pluginConfig) {
       const newPartLabel = cfg.headers.partLabel
       const newData = R.map(([key, value]) => ({
         name: layer.attributes[key].label,
-        units: ` ${layer.attributes[key].units}`,
+        units: layer.attributes[key].units,
         y: value,
         persentage: (value / valuesSum) * 100
       }), R.toPairs(values))

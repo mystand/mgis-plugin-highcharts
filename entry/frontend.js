@@ -2,8 +2,8 @@ import Dashboard from '../components/dashboard/Dashboard'
 import FieldsInput from '../components/fields-input/FieldsInput'
 
 const highchartTypes = [
-  { value: 'Columns', label: 'Круговая диаграмма' },
-  { value: 'Pie', label: 'Гистограмма' }
+  { value: 'Pie', label: 'Круговая диаграмма' },
+  { value: 'Columns', label: 'Гистограмма' }
 ]
 export default {
   name: 'Графики',
