@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import ReactHighcharts from 'react-highcharts'
 
 import styles from './dashboard-style.styl'
-import opt from './chartsdata'
+import pie from './chartsdata'
+import column from './columnData'
 
-function buildData(data, feature, layer, pluginConfig) {
+function buildData(feature, layer, pluginConfig) {
   if (R.isNil(feature.id)) {
     return null
   }
@@ -18,7 +19,8 @@ function buildData(data, feature, layer, pluginConfig) {
         attributes: R.pickAll(config.fields, feature.properties),
         headers: {
           title: config.name,
-          partLabel: config.partLabel
+          partLabel: config.partLabel,
+          type: config.type
         }
       }
       return (r.concat(configFromState))
@@ -27,6 +29,7 @@ function buildData(data, feature, layer, pluginConfig) {
   }, [], R.values(pluginConfig.items))
   if (!R.isEmpty(neededLayer)) {
     const newConfig = neededLayer.map((cfg) => {
+      const data = cfg.headers.type === 'Pie' ? pie : column
       const dataResult = R.clone(data)
       const values = R.map(x => R.isNil(x) ? 0 : JSON.parse(x), cfg.attributes)
       const valuesSum = R.reduce(R.add, 0, R.values(values))
@@ -38,7 +41,8 @@ function buildData(data, feature, layer, pluginConfig) {
       const newData = R.map(([key, value]) => ({
         name: layer.attributes[key].label,
         units: ` ${layer.attributes[key].units}`,
-        y: value
+        y: value,
+        persentage: (value / valuesSum) * 100
       }), R.toPairs(values))
       dataResult.series[0].data = newData
       dataResult.title.text = newTitle
@@ -90,7 +94,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { layer, feature, pluginConfig } = this.props
-    const configList = buildData(opt, feature, layer, pluginConfig)
+    const configList = buildData(feature, layer, pluginConfig)
 
     if (R.isNil(configList)) {
       return null

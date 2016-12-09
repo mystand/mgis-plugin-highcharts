@@ -1,4 +1,4 @@
-const opt = {
+const pie = {
   chart: {
     style: {
       fontFamily: 'Open Sans, sans-serif'
@@ -36,4 +36,4 @@ const opt = {
   }]
 }
 
-export default opt
+export default pie

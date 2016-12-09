@@ -1,6 +1,10 @@
 import Dashboard from '../components/dashboard/Dashboard'
 import FieldsInput from '../components/fields-input/FieldsInput'
 
+const highchartTypes = [
+  { value: 'Columns', label: 'Круговая диаграмма' },
+  { value: 'Pie', label: 'Гистограмма' }
+]
 export default {
   name: 'Графики',
   options: [
@@ -11,6 +15,7 @@ export default {
       item: {
         fields: [
           { key: 'sourceLayerKey', label: 'Слой', type: 'select', options: 'layers' },
+          { key: 'type', label: 'Тип Графика', type: 'select', inputOptions: { options: highchartTypes } },
           { key: 'fields', label: 'Величины для графика', type: FieldsInput },
           { key: 'name', label: 'Название графика', type: 'string' },
           { key: 'partLabel', label: 'Название доли', type: 'string' }
