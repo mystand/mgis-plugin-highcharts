@@ -37,7 +37,8 @@ const column = {
       units: 'т',
       y: 0.2
     }]
-  }]
+  }],
+  credits: false
 }
 
 export default column

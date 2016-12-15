@@ -18,7 +18,7 @@ const pie = {
   },
   plotOptions: {
     pie: {
-      allowPointSelect: true,
+      allowPointSelect: false,
       cursor: 'pointer',
       dataLabels: {
         enabled: false
@@ -33,7 +33,8 @@ const pie = {
       units: 'т',
       y: 0.2
     }]
-  }]
+  }],
+  credits: false
 }
 
 export default pie
